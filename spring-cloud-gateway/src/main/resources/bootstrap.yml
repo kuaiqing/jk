@@ -1,0 +1,19 @@
+spring:
+  cloud:
+    nacos:
+      config:
+        server-addr: 127.0.0.1:8848
+        namespace: f27baad5-99b3-427a-b801-54e72b008bca
+        group: pro
+        data-id: spring.alibaba.gateway.application.yaml
+        type: yaml
+        prefix: spring.alibaba.gateway.application
+        file-extension: yaml
+        ext-config[0]:
+          server-addr: 127.0.0.1:8848
+          namespace: f27baad5-99b3-427a-b801-54e72b008bca
+          group: pro
+          data-id: spring.alibaba.gateway.bootstrap.yaml
+          prefix: spring.alibaba.gateway.bootstrap
+          file-extension: yaml
+
