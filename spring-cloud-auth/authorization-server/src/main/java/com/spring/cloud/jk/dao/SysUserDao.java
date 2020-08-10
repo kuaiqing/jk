@@ -12,11 +12,12 @@ import java.util.List;
 /**
  * @author Administrator
  */
+@org.apache.ibatis.annotations.Mapper
 public interface SysUserDao  extends Mapper<SysUser> {
 
     /**
      * 查询数据
-     *
+     *userName 23
      * @param
      * @return 影响行数
      */

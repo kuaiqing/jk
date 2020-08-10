@@ -25,9 +25,9 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
  * 注入Bean PasswordEncoder
  *
  */
-@Configuration
-@EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+//@Configuration
+//@EnableWebSecurity
+//@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebServerSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     SecurityAuthenticationSuccessHandler securityAuthenticationSuccessHandler;

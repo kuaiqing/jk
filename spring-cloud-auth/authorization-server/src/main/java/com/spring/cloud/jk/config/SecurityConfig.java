@@ -3,21 +3,35 @@ package com.spring.cloud.jk.config;
 
 import com.spring.cloud.jk.filter.JwtLoginFilter;
 import com.spring.cloud.jk.filter.JwtVerifyFilter;
+import com.spring.cloud.jk.handler.SecurityAuthenticationFailHandler;
+import com.spring.cloud.jk.handler.SecurityAuthenticationSuccessHandler;
 import com.spring.cloud.jk.service.impl.SysUserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
+/**
+ * @author Administrator
+ */
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+
+    @Autowired
+    SecurityAuthenticationSuccessHandler securityAuthenticationSuccessHandler;
+    @Autowired
+    SecurityAuthenticationFailHandler securityAuthenticationFailHandler;
 
     @Autowired
     private SysUserServiceImpl sysUserServiceImpl;
@@ -30,6 +44,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         //用户信息的来源
@@ -41,7 +56,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .withUser("admin")
                 .password("{noop}admin")
                 .roles("ADMIN");*/
-        auth.userDetailsService(sysUserServiceImpl).passwordEncoder(getBCryptPasswordEncoder());
+        auth.userDetailsService(sysUserServiceImpl).passwordEncoder(getBCryptPasswordEncoder());//添加自定义的认证管理类
+
     }
 
     @Override
@@ -55,10 +71,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
-                .loginPage("/hello")
-                .loginProcessingUrl("/index")
-//                .successForwardUrl("index.html")
-                .failureForwardUrl("/fail")
+//                .loginPage("/hello")
+//                .loginProcessingUrl("/index")
+////                .successForwardUrl("index.html")
+//                .failureForwardUrl("/fail")
                 .permitAll()
                 .and()
                 .logout()
@@ -70,7 +86,26 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilter(new JwtLoginFilter(super.authenticationManager(),pop))
                 .addFilterAt(
                         new JwtVerifyFilter(super.authenticationManager(),pop), BasicAuthenticationFilter.class)
-                ;
+        ;
+//        http.csrf().disable();
+//        http
+//                .requestMatchers().antMatchers("/oauth/**","/login/**","/logout/**")
+//                .and()
+//                .authorizeRequests()
+//                .antMatchers("/oauth/**").authenticated()
+//                .and()
+//                .formLogin().permitAll()
+//                .successHandler(securityAuthenticationSuccessHandler)
+//                .failureHandler(securityAuthenticationFailHandler);
 
     }
+    @Override
+    @Bean
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
+
+
+
+
 }
