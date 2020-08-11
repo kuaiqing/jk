@@ -3,8 +3,6 @@ package com.spring.cloud.jk.config;
 
 import com.spring.cloud.jk.filter.JwtLoginFilter;
 import com.spring.cloud.jk.filter.JwtVerifyFilter;
-import com.spring.cloud.jk.handler.SecurityAuthenticationFailHandler;
-import com.spring.cloud.jk.handler.SecurityAuthenticationSuccessHandler;
 import com.spring.cloud.jk.service.impl.SysUserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -28,10 +26,10 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
-    @Autowired
-    SecurityAuthenticationSuccessHandler securityAuthenticationSuccessHandler;
-    @Autowired
-    SecurityAuthenticationFailHandler securityAuthenticationFailHandler;
+//    @Autowired
+//    SecurityAuthenticationSuccessHandler securityAuthenticationSuccessHandler;
+//    @Autowired
+//    SecurityAuthenticationFailHandler securityAuthenticationFailHandler;
 
     @Autowired
     private SysUserServiceImpl sysUserServiceImpl;

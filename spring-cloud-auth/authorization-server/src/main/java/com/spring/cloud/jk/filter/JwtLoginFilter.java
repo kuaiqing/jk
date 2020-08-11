@@ -5,6 +5,7 @@ import com.spring.cloud.jk.config.ResConfig;
 import com.spring.cloud.jk.domain.SysRoles;
 import com.spring.cloud.jk.domain.SysUser;
 import com.spring.cloud.jk.utils.JwtUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -25,6 +26,7 @@ import java.util.Map;
 /**
  * @author Administrator
  */
+@Slf4j
 public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
 
     private AuthenticationManager authenticationManager;
@@ -75,17 +77,26 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
         sysUser.setRoles((List<SysRoles>) authResult.getAuthorities());
         sysUser.setUserName(authResult.getName());
         //生成token
-        String s = JwtUtils.generateTokenExpireInSeconds(sysUser, prop.getPrivateKey(), 2 * 60);
+        Map<String, Object> stringObjectMap = JwtUtils.generateTokenExpireInSeconds(sysUser, prop.getPrivateKey(),
+                7200);
+        /*
+        map.put("TOKEN",compact);
+        map.put("userInfo",s);
+        map.put("jti",jti);
+        map.put("date",date);
+         */
+        log.info("token信息{}"+stringObjectMap);
+        String token = stringObjectMap.get("TOKEN").toString();
         //将token放入响应头
         response.setContentType("application/json; charset=UTF-8");
-        response.setHeader("Authorization", "Bearer "+s);
+        response.setHeader("Authorization", "Bearer "+token);
         PrintWriter writer = null;
         try {
             writer = response.getWriter();
             Map ap = new HashMap();
             ap.put("code", HttpServletResponse.SC_OK);
             ap.put("msg", "登录成功");
-            ap.put("Authorization", "Bearer "+s);
+            ap.put("Authorization", "Bearer "+token);
             writer.println(ap);
             writer.close();
         } catch (IOException ex) {

@@ -22,10 +22,10 @@ public interface SysUserDao  extends Mapper<SysUser> {
      * @return 影响行数
      */
     @Select("SELECT password,username userName,role roles FROM cc WHERE username = #{username}")
-    @Results({
-            @Result(id=true,property = "userName",column = "username"),
-            @Result(property = "roles",column = "username",javaType = List.class,
-                    many = @Many(select = "com.kk.spring.security.authtication.dao.SysRolesDao.getRolesByUserName"))
-    })
+//    @Results({
+//            @Result(id=true,property = "userName",column = "username"),
+//            @Result(property = "roles",column = "username",javaType = List.class,
+//                    many = @Many(select = "com.kk.spring.security.authtication.dao.SysRolesDao.getRolesByUserName"))
+//    })
     SysUser getUserByUserName(String userName);
 }

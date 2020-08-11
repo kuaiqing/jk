@@ -7,6 +7,7 @@ import com.spring.cloud.jk.pojo.Payload;
 import com.spring.cloud.jk.utils.JwtUtils;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -56,7 +57,11 @@ public class JwtVerifyFilter extends OncePerRequestFilter {
             if(userInfo != null){
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userInfo.getUserName(), null,
                         userInfo.getAuthorities());
+                SecurityContext context = SecurityContextHolder.getContext();
+                System.out.println("-------------"+context);
                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+                SecurityContext context1 = SecurityContextHolder.getContext();
+                System.out.println("-------------"+context1);
                 filterChain.doFilter(httpServletRequest, httpServletResponse);
             }
         }

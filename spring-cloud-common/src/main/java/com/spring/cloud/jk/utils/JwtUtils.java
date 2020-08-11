@@ -1,6 +1,7 @@
 package com.spring.cloud.jk.utils;
 
 import com.spring.cloud.jk.pojo.Payload;
+import com.sun.org.apache.bcel.internal.generic.RETURN;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -9,8 +10,7 @@ import org.joda.time.DateTime;
 
 import java.security.PrivateKey;
 import java.security.PublicKey;
-import java.util.Base64;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * 创建密钥 生成 类
@@ -44,13 +44,22 @@ public class JwtUtils {
      * @param expire     过期时间，单位秒
      * @return JWT
      */
-    public static String generateTokenExpireInSeconds(Object userInfo, PrivateKey privateKey, int expire) {
-        return Jwts.builder()
-                .claim(JWT_PAYLOAD_USER_KEY, JsonUtils.toString(userInfo))
-                .setId(createJTI())
-                .setExpiration(DateTime.now().plusSeconds(expire).toDate())
+    public static  Map<String,Object> generateTokenExpireInSeconds(Object userInfo, PrivateKey privateKey, int expire) {
+        String s = JsonUtils.toString(userInfo);
+        String jti = createJTI();
+        Date date = DateTime.now().plusSeconds(expire).toDate();
+        String compact = Jwts.builder()
+                .claim(JWT_PAYLOAD_USER_KEY, s)
+                .setId(jti)
+                .setExpiration(date)
                 .signWith(SignatureAlgorithm.RS256, privateKey)
                 .compact();
+        Map<String,Object> map = new HashMap<>(16);
+        map.put("TOKEN",compact);
+        map.put("userInfo",s);
+        map.put("jti",jti);
+        map.put("date",date);
+        return  map;
     }
 
     /**

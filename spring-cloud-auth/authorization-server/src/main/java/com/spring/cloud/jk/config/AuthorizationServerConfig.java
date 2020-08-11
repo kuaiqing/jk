@@ -1,6 +1,7 @@
 package com.spring.cloud.jk.config;
 
 
+import com.spring.cloud.jk.service.OssClientDetailsService;
 import com.spring.cloud.jk.service.impl.SysUserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -36,6 +37,9 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     private PasswordEncoder passwordEncoder;
     @Autowired
     private SysUserServiceImpl sysUserServiceImpl;
+
+    @Autowired
+    private OssClientDetailsService clientDetailsService;
 
 
 
@@ -81,11 +85,16 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-        clients.inMemory().withClient("demoApp").secret(passwordEncoder.encode("demoAppSecret"))
-                .redirectUris("http://baidu.com")// code授权添加
-                .authorizedGrantTypes("authorization_code", "client_credentials", "password", "refresh_token")
-                .scopes("all").resourceIds("oauth2-resource").accessTokenValiditySeconds(1200)
-                .refreshTokenValiditySeconds(50000);
+//        clients.inMemory().withClient("demoApp").secret(passwordEncoder.encode("demoAppSecret"))
+//       // 添加自定义的认证管理类
+//
+//                .authorizedGrantTypes("authorization_code", "client_credentials", "password", "refresh_token")
+//                .scopes("all").resourceIds("oauth2-resource").accessTokenValiditySeconds(1200)
+//                .refreshTokenValiditySeconds(50000);
+
+        clients.withClientDetails(clientDetailsService);
+
+
     }
 }
 

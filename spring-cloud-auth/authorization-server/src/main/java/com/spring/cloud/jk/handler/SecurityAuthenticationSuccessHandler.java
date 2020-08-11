@@ -13,12 +13,12 @@ import java.io.IOException;
 /**
  * @author Administrator
  */
-@Component("securityAuthenticationSuccessHandler")
-@Slf4j
-public class SecurityAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
-    @Override
-    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        log.info("登录成功{}"+authentication.getAuthorities());
-        super.onAuthenticationSuccess(request, response, authentication);
-    }
-}
+//@Component("securityAuthenticationSuccessHandler")
+//@Slf4j
+//public class SecurityAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
+//    @Override
+//    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+//        log.info("登录成功{}"+authentication.getAuthorities());
+//        super.onAuthenticationSuccess(request, response, authentication);
+//    }
+//}
