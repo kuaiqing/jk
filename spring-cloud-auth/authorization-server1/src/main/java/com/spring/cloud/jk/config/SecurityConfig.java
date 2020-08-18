@@ -25,12 +25,6 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-
-//    @Autowired
-//    SecurityAuthenticationSuccessHandler securityAuthenticationSuccessHandler;
-//    @Autowired
-//    SecurityAuthenticationFailHandler securityAuthenticationFailHandler;
-
     @Autowired
     private SysUserServiceImpl sysUserServiceImpl;
 
@@ -46,14 +40,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         //用户信息的来源
-        /*auth.inMemoryAuthentication()
-                 .withUser("user")
-                 .password("{noop}user")
-                 .roles("USER")
-                 .and()
-                .withUser("admin")
-                .password("{noop}admin")
-                .roles("ADMIN");*/
         auth.userDetailsService(sysUserServiceImpl).passwordEncoder(getBCryptPasswordEncoder());//添加自定义的认证管理类
 
     }
@@ -85,17 +71,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilterAt(
                         new JwtVerifyFilter(super.authenticationManager(),pop), BasicAuthenticationFilter.class)
         ;
-//        http.csrf().disable();
-//        http
-//                .requestMatchers().antMatchers("/oauth/**","/login/**","/logout/**")
-//                .and()
-//                .authorizeRequests()
-//                .antMatchers("/oauth/**").authenticated()
-//                .and()
-//                .formLogin().permitAll()
-//                .successHandler(securityAuthenticationSuccessHandler)
-//                .failureHandler(securityAuthenticationFailHandler);
-
     }
     @Override
     @Bean

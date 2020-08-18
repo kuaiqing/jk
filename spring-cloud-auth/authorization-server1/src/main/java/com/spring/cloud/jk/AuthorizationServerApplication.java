@@ -35,7 +35,7 @@ import org.springframework.web.bind.annotation.RestController;
 @SpringBootApplication
 @EnableDiscoveryClient
 @RestController
-@MapperScan("com.spring.cloud.jk.dao.SysUserDao")
+@MapperScan("com.spring.cloud.jk.dao")
 public class AuthorizationServerApplication {
 
     public static void main(String[] args) {
